@@ -10,3 +10,4 @@ tst1u = utf8(tst1)
 buf = IOBuffer()
 writemime(buf, "text/latex", tst1)
 @test takebuf_string(buf) == tst1u
+@test latexstring(tst1u) == tst1 == LaTeXString(tst1u)

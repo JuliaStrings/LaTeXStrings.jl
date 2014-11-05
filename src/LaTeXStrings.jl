@@ -1,13 +1,15 @@
 module LaTeXStrings
 export LaTeXString, latexstring, @L_str, @L_mstr
 
+using Compat
+
 # IJulia supports LaTeX output for any object with a text/latex
 # writemime method, but these are annoying to type as string literals
 # in Julia because of all the escaping required, e.g. "\$\\alpha +
 # \\beta\$".  To simplify this, we add a new string type with a macro
 # constructor, so that one can simply do L"$\alpha + \beta$".
 
-immutable LaTeXString <: String
+immutable LaTeXString <: AbstractString
     s::ByteString
 end
 
@@ -19,7 +21,7 @@ function latexstring(s::ByteString)
     return ismatch(r"[^\\]\$|^\$", s) ?
         LaTeXString(s) :  LaTeXString(string("\$", s, "\$"))
 end
-latexstring(s::String) = latexstring(bytestring(s))
+latexstring(s::AbstractString) = latexstring(bytestring(s))
 latexstring(args...) = latexstring(string(args...))
 
 macro L_str(s, flags...) latexstring(s) end

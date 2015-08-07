@@ -1,3 +1,5 @@
+VERSION >= v"0.4.0-dev+6521" && __precompile__()
+
 module LaTeXStrings
 export LaTeXString, latexstring, @L_str, @L_mstr
 

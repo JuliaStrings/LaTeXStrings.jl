@@ -29,7 +29,7 @@ latexstring(args...) = latexstring(string(args...))
 macro L_str(s, flags...) latexstring(s) end
 macro L_mstr(s, flags...) latexstring(s) end
 
-import Base: writemime, show, write, endof, getindex, sizeof, search, rsearch, isvalid, next, length, bytestring, convert, IOBuffer, pointer
+import Base: writemime, show, write, endof, getindex, sizeof, search, rsearch, isvalid, next, length, bytestring, IOBuffer, pointer
 
 write(io::IO, s::LaTeXString) = write(io, s.s)
 writemime(io::IO, ::MIME"application/x-latex", s::LaTeXString) = write(io, s)
@@ -54,8 +54,19 @@ sizeof(s::LaTeXString) = sizeof(s.s)
 search(s::LaTeXString, c::Char, i::Integer) = search(s.s, c, i)
 rsearch(s::LaTeXString, c::Char, i::Integer) = rsearch(s.s, c, i)
 isvalid(s::LaTeXString, i::Integer) = isvalid(s.s, i)
-convert(T::Union(Type{Ptr{Uint8}},Type{Ptr{Int8}}), s::LaTeXString) = convert(T, s.s)
 pointer(s::LaTeXString) = pointer(s.s)
 IOBuffer(s::LaTeXString) = IOBuffer(s.s)
+
+# conversion to pass LaTeXString to ccall arguments
+if VERSION >= v"0.4.0-dev+3710"
+    import Base.unsafe_convert
+else
+    import Base.convert
+    const unsafe_convert = Base.convert
+end
+@compat unsafe_convert(T::Union{Type{Ptr{UInt8}},Type{Ptr{Int8}}}, s::LaTeXString) = convert(T, s.s)
+if VERSION >= v"0.4.0-dev+4603"
+    unsafe_convert(::Type{Cstring}, s::LaTeXString) = unsafe_convert(Cstring, s.s)
+end
 
 end # module

@@ -1,4 +1,4 @@
-using LaTeXStrings
+using LaTeXStrings, Compat
 using Base.Test
 
 # write your own tests here
@@ -11,3 +11,5 @@ buf = IOBuffer()
 writemime(buf, "text/latex", tst1)
 @test takebuf_string(buf) == tst1u
 @test latexstring(tst1u) == tst1 == LaTeXString(tst1u)
+
+@test ccall(:strlen, Csize_t, (Cstring,), tst1) == ccall(:strlen, Csize_t, (Ptr{UInt8},), tst1) == sizeof(tst1)

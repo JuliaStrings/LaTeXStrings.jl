@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/stevengj/LaTeXStrings.jl.svg?branch=master)](https://travis-ci.org/stevengj/LaTeXStrings.jl)
+[![LaTeXStrings](http://pkg.julialang.org/badges/LaTeXStrings_0.3.svg)](http://pkg.julialang.org/?pkg=LaTeXStrings&ver=0.3)
+[![LaTeXStrings](http://pkg.julialang.org/badges/LaTeXStrings_0.4.svg)](http://pkg.julialang.org/?pkg=LaTeXStrings&ver=0.4)
+
 # LaTeXStrings
 
 This is a small package to make it easier to type LaTeX equations in

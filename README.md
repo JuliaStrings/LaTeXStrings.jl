@@ -52,7 +52,7 @@ interpolation](http://docs.julialang.org/en/latest/manual/strings/#interpolation
 (inserting the values of other variables into your string).
 
 Finally, you can use the lowest-level constructor
-`LaTeXString(s::ByteString)`.  The only advantage of this is that it
+`LaTeXString(s)`.  The only advantage of this is that it
 does *not* automatically put `$` at the beginning and end of the
 string.  So, if for some reason you want to use `text/latex` display
 of ordinary text (with no equations or formatting), you can use this

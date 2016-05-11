@@ -4,6 +4,7 @@ module LaTeXStrings
 export LaTeXString, latexstring, @L_str, @L_mstr
 
 using Compat
+import Compat.String
 
 # IJulia supports LaTeX output for any object with a text/latex
 # writemime method, but these are annoying to type as string literals
@@ -12,18 +13,18 @@ using Compat
 # constructor, so that one can simply do L"$\alpha + \beta$".
 
 immutable LaTeXString <: AbstractString
-    s::ByteString
+    s::String
 end
 
 # coercing constructor:
-function latexstring(s::ByteString)
+function latexstring(s::String)
     # the only point of using LaTeXString to represent equations, since
     # IJulia doesn't support LaTeX output other than equations, so add $'s
     # around the string if they aren't there (ignoring \$)
     return ismatch(r"[^\\]\$|^\$", s) ?
         LaTeXString(s) :  LaTeXString(string("\$", s, "\$"))
 end
-latexstring(s::AbstractString) = latexstring(bytestring(s))
+latexstring(s::AbstractString) = latexstring(String(s))
 latexstring(args...) = latexstring(string(args...))
 
 macro L_str(s, flags...) latexstring(s) end

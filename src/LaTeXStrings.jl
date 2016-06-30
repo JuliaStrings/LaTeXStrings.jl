@@ -30,13 +30,14 @@ latexstring(args...) = latexstring(string(args...))
 macro L_str(s, flags...) latexstring(s) end
 macro L_mstr(s, flags...) latexstring(s) end
 
-import Base: writemime, show, write, endof, getindex, sizeof, search, rsearch, isvalid, next, length, bytestring, IOBuffer, pointer
+import Base: write, endof, getindex, sizeof, search, rsearch, isvalid, next, length, bytestring, IOBuffer, pointer
+@compat import Base.show
 
 write(io::IO, s::LaTeXString) = write(io, s.s)
-writemime(io::IO, ::MIME"application/x-latex", s::LaTeXString) = write(io, s)
-writemime(io::IO, ::MIME"text/latex", s::LaTeXString) = write(io, s)
+@compat show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = write(io, s)
+@compat show(io::IO, ::MIME"text/latex", s::LaTeXString) = write(io, s)
 
-function show(io::IO, s::LaTeXString)
+@compat function show(io::IO, s::LaTeXString)
     print(io, "L")
     Base.print_quoted_literal(io, s.s)
 end

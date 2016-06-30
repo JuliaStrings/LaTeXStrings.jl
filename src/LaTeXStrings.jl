@@ -37,7 +37,7 @@ write(io::IO, s::LaTeXString) = write(io, s.s)
 @compat show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = write(io, s)
 @compat show(io::IO, ::MIME"text/latex", s::LaTeXString) = write(io, s)
 
-@compat function show(io::IO, s::LaTeXString)
+function show(io::IO, s::LaTeXString)
     print(io, "L")
     Base.print_quoted_literal(io, s.s)
 end

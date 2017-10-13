@@ -12,7 +12,7 @@ import Compat.String
 # \\beta\$".  To simplify this, we add a new string type with a macro
 # constructor, so that one can simply do L"$\alpha + \beta$".
 
-immutable LaTeXString <: AbstractString
+struct LaTeXString <: AbstractString
     s::String
 end
 

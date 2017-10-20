@@ -1,4 +1,4 @@
-VERSION >= v"0.4.0-dev+6521" && __precompile__()
+__precompile__()
 
 module LaTeXStrings
 export LaTeXString, latexstring, @L_str, @L_mstr
@@ -63,16 +63,10 @@ isvalid(s::LaTeXString, i::Integer) = isvalid(s.s, i)
 pointer(s::LaTeXString) = pointer(s.s)
 IOBuffer(s::LaTeXString) = IOBuffer(s.s)
 
-# conversion to pass LaTeXString to ccall arguments
-if VERSION >= v"0.4.0-dev+3710"
-    import Base.unsafe_convert
-else
-    import Base.convert
-    const unsafe_convert = Base.convert
-end
+import Base.convert
+const unsafe_convert = Base.convert
+
 @compat unsafe_convert(T::Union{Type{Ptr{UInt8}},Type{Ptr{Int8}}}, s::LaTeXString) = convert(T, s.s)
-if VERSION >= v"0.4.0-dev+4603"
-    unsafe_convert(::Type{Cstring}, s::LaTeXString) = unsafe_convert(Cstring, s.s)
-end
+unsafe_convert(::Type{Cstring}, s::LaTeXString) = unsafe_convert(Cstring, s.s)
 
 end # module

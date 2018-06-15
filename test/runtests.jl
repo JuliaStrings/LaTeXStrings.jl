@@ -20,3 +20,4 @@ end
 @test tst1[1] == 'a'
 @test codeunit(tst1, 1) == UInt8('a')
 @test L"foo"[1] == '$'
+@test tst1[1:2] == tst1[0x01:0x02] == tst1[[1,2]] == "an"

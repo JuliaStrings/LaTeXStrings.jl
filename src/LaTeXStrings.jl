@@ -1,10 +1,15 @@
 __precompile__()
 
+"""
+The LaTeXStrings module exists mainly to make LaTeX equations easier to type as
+literal strings, and so that the resulting strings display as formatted equations
+in supporting environments like IJulia.
+
+See in particular the `LaTeXString` type and the `L"..."` constructor macro.
+"""
 module LaTeXStrings
 export LaTeXString, latexstring, @L_str, @L_mstr
-
 using Compat
-import Compat.String
 
 # IJulia supports LaTeX output for any object with a text/latex
 # writemime method, but these are annoying to type as string literals
@@ -12,61 +17,71 @@ import Compat.String
 # \\beta\$".  To simplify this, we add a new string type with a macro
 # constructor, so that one can simply do L"$\alpha + \beta$".
 
+@doc raw"""
+A `LaTeXString` is a string type whose contents represent a fragment of LaTeX code,
+typically containing an equation (`$...$`).   In certain environments (e.g. IJulia)
+this will display with LaTeX-like formatting.   For the most part, you can use
+a `LaTeXString` object in any context that expects an `AbstractString` object.
+
+The `L"..."` macro is convenient for constructing `LaTeXString` objects, because
+it eliminates the need to escape backslashes and dollar signs, and implicitly inserts
+dollar signs around the string if none are present.  For example, `L"$\alpha$"`, `L"\alpha"`,
+and `LaTeXString("\$\\alpha\$")` are all equivalent.
+"""
 struct LaTeXString <: AbstractString
     s::String
 end
 
-# coercing constructor:
+"""
+    latexstring(args...)
+
+Similar to `string(args...)`, but generates a `LaTeXString` instead of a `String`.
+"""
+latexstring(args...) = latexstring(string(args...))
 function latexstring(s::String)
     # the only point of using LaTeXString to represent equations, since
     # IJulia doesn't support LaTeX output other than equations, so add $'s
     # around the string if they aren't there (ignoring \$)
-    return ismatch(r"[^\\]\$|^\$", s) ?
-        LaTeXString(s) :  LaTeXString(string("\$", s, "\$"))
+    return occursin(r"[^\\]\$|^\$", s) ? LaTeXString(s) :  LaTeXString(string('\$', s, '\$'))
 end
 latexstring(s::AbstractString) = latexstring(String(s))
-latexstring(args...) = latexstring(string(args...))
 
 macro L_str(s, flags...) latexstring(s) end
 macro L_mstr(s, flags...) latexstring(s) end
 
-import Base: write, endof, getindex, sizeof, search, rsearch, isvalid, next, length, IOBuffer, pointer
-@compat import Base.show
-
-write(io::IO, s::LaTeXString) = write(io, s.s)
-@compat show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = write(io, s)
-@compat show(io::IO, ::MIME"text/latex", s::LaTeXString) = write(io, s)
-
-function show(io::IO, s::LaTeXString)
+Base.write(io::IO, s::LaTeXString) = write(io, s.s)
+Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = write(io, s)
+Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = write(io, s)
+function Base.show(io::IO, s::LaTeXString)
     print(io, "L")
     Base.print_quoted_literal(io, s.s)
 end
 
-if isdefined(Base, :bytestring)
-    import Base: bytestring
-    bytestring(s::LaTeXString) = bytestring(s.s)
+Compat.firstindex(s::LaTeXString) = Compat.firstindex(s.s)
+Compat.lastindex(s::LaTeXString) = Compat.lastindex(s.s)
+Base.start(s::LaTeXString) = start(s.s)
+Base.next(s::LaTeXString, i) = next(s.s, i)
+Base.done(s::LaTeXString, i) = done(s.s, i)
+if isdefined(Base, :iterate)
+    Base.iterate(s::LaTeXString, i::Int) = iterate(s.s, i)
 end
-
-endof(s::LaTeXString) = endof(s.s)
-next(s::LaTeXString, i::Int) = next(s.s, i)
-length(s::LaTeXString) = length(s.s)
-getindex(s::LaTeXString, i::Int) = getindex(s.s, i)
-getindex(s::LaTeXString, i::Integer) = getindex(s.s, i)
-getindex(s::LaTeXString, i::Real) = getindex(s.s, i)
-getindex(s::LaTeXString, i::UnitRange{Int}) = getindex(s.s, i)
-getindex{T<:Integer}(s::LaTeXString, i::UnitRange{T}) = getindex(s.s, i)
-getindex(s::LaTeXString, i::AbstractVector) = getindex(s.s, i)
-sizeof(s::LaTeXString) = sizeof(s.s)
-search(s::LaTeXString, c::Char, i::Integer) = search(s.s, c, i)
-rsearch(s::LaTeXString, c::Char, i::Integer) = rsearch(s.s, c, i)
-isvalid(s::LaTeXString, i::Integer) = isvalid(s.s, i)
-pointer(s::LaTeXString) = pointer(s.s)
-IOBuffer(s::LaTeXString) = IOBuffer(s.s)
-
-import Base.convert
-const unsafe_convert = Base.convert
-
-@compat unsafe_convert(T::Union{Type{Ptr{UInt8}},Type{Ptr{Int8}}}, s::LaTeXString) = convert(T, s.s)
-unsafe_convert(::Type{Cstring}, s::LaTeXString) = unsafe_convert(Cstring, s.s)
+Base.nextind(s::LaTeXString, i::Int) = nextind(s.s, i)
+Base.prevind(s::LaTeXString, i::Int) = prevind(s.s, i)
+Base.eachindex(s::LaTeXString) = eachindex(s.s)
+Base.length(s::LaTeXString) = length(s.s)
+Base.getindex(s::LaTeXString, i::Integer) = getindex(s.s, i)
+Base.getindex(s::LaTeXString, i::Int) = getindex(s.s, i) # for method ambig in Julia 0.6
+Base.getindex(s::LaTeXString, i::UnitRange{Int}) = getindex(s.s, i)
+Base.getindex(s::LaTeXString, i::UnitRange{<:Integer}) = getindex(s.s, i)
+Base.getindex(s::LaTeXString, i::AbstractVector{<:Integer}) = getindex(s.s, i)
+Compat.codeunit(s::LaTeXString, i::Integer) = codeunit(s.s, i)
+Compat.codeunit(s::LaTeXString) = codeunit(s.s)
+Compat.ncodeunits(s::LaTeXString) = ncodeunits(s.s)
+Compat.codeunits(s::LaTeXString) = codeunits(s.s)
+Base.sizeof(s::LaTeXString) = sizeof(s.s)
+Base.isvalid(s::LaTeXString, i::Integer) = isvalid(s.s, i)
+Base.pointer(s::LaTeXString) = pointer(s.s)
+Base.IOBuffer(s::LaTeXString) = IOBuffer(s.s)
+Base.unsafe_convert(T::Union{Type{Ptr{UInt8}},Type{Ptr{Int8}},Cstring}, s::LaTeXString) = Base.unsafe_convert(T, s.s)
 
 end # module

@@ -1,4 +1,4 @@
-__precompile__()
+VERSION < v"0.7.0-beta2.199" && __precompile__()
 
 """
 The LaTeXStrings module exists mainly to make LaTeX equations easier to type as

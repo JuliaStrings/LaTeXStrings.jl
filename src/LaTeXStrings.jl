@@ -59,11 +59,12 @@ end
 
 Compat.firstindex(s::LaTeXString) = Compat.firstindex(s.s)
 Compat.lastindex(s::LaTeXString) = Compat.lastindex(s.s)
-Base.start(s::LaTeXString) = start(s.s)
-Base.next(s::LaTeXString, i) = next(s.s, i)
-Base.done(s::LaTeXString, i) = done(s.s, i)
-if isdefined(Base, :iterate)
+@static if isdefined(Base, :iterate)
     Base.iterate(s::LaTeXString, i::Int) = iterate(s.s, i)
+else
+    Base.start(s::LaTeXString) = start(s.s)
+    Base.next(s::LaTeXString, i) = next(s.s, i)
+    Base.done(s::LaTeXString, i) = done(s.s, i)
 end
 Base.nextind(s::LaTeXString, i::Int) = nextind(s.s, i)
 Base.prevind(s::LaTeXString, i::Int) = prevind(s.s, i)

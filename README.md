@@ -1,11 +1,11 @@
 [![Build Status](https://travis-ci.org/stevengj/LaTeXStrings.jl.svg?branch=master)](https://travis-ci.org/stevengj/LaTeXStrings.jl)
-[![LaTeXStrings](http://pkg.julialang.org/badges/LaTeXStrings_0.3.svg)](http://pkg.julialang.org/?pkg=LaTeXStrings&ver=0.3)
-[![LaTeXStrings](http://pkg.julialang.org/badges/LaTeXStrings_0.4.svg)](http://pkg.julialang.org/?pkg=LaTeXStrings&ver=0.4)
+[![LaTeXStrings](http://pkg.julialang.org/badges/LaTeXStrings_0.6.svg)](http://pkg.julialang.org/?pkg=LaTeXStrings&ver=0.6)
+[![LaTeXStrings](http://pkg.julialang.org/badges/LaTeXStrings_0.7.svg)](http://pkg.julialang.org/?pkg=LaTeXStrings&ver=0.7)
 
 # LaTeXStrings
 
 This is a small package to make it easier to type LaTeX equations in
-string literals in the [Julia language](http://julialang.org/), 
+string literals in the [Julia language](http://julialang.org/),
 written by [Steven G. Johnson](http://math.mit.edu/~stevenj).
 
 With ordinary strings in Julia, to enter a string literal with

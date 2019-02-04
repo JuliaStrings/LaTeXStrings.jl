@@ -50,8 +50,8 @@ macro L_str(s, flags...) latexstring(s) end
 macro L_mstr(s, flags...) latexstring(s) end
 
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)
-Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = write(io, s)
-Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = write(io, s)
+Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)
+Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = print(io, s.s)
 function Base.show(io::IO, s::LaTeXString)
     print(io, "L")
     Base.print_quoted_literal(io, s.s)

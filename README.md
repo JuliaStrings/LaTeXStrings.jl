@@ -1,6 +1,4 @@
 [![Build Status](https://travis-ci.org/stevengj/LaTeXStrings.jl.svg?branch=master)](https://travis-ci.org/stevengj/LaTeXStrings.jl)
-[![LaTeXStrings](http://pkg.julialang.org/badges/LaTeXStrings_0.6.svg)](http://pkg.julialang.org/?pkg=LaTeXStrings&ver=0.6)
-[![LaTeXStrings](http://pkg.julialang.org/badges/LaTeXStrings_0.7.svg)](http://pkg.julialang.org/?pkg=LaTeXStrings&ver=0.7)
 
 # LaTeXStrings
 

@@ -1,5 +1,4 @@
-using LaTeXStrings, Compat
-using Compat.Test
+using LaTeXStrings, Test
 
 tst1 = L"an equation: $\alpha^2$"
 tst1s = String(tst1)

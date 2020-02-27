@@ -1,5 +1,3 @@
-VERSION < v"0.7.0-beta2.199" && __precompile__()
-
 """
 The LaTeXStrings module exists mainly to make LaTeX equations easier to type as
 literal strings, and so that the resulting strings display as formatted equations
@@ -9,7 +7,6 @@ See in particular the `LaTeXString` type and the `L"..."` constructor macro.
 """
 module LaTeXStrings
 export LaTeXString, latexstring, @L_str, @L_mstr
-using Compat
 
 # IJulia supports LaTeX output for any object with a text/latex
 # writemime method, but these are annoying to type as string literals
@@ -57,16 +54,10 @@ function Base.show(io::IO, s::LaTeXString)
     Base.print_quoted_literal(io, s.s)
 end
 
-Compat.firstindex(s::LaTeXString) = Compat.firstindex(s.s)
-Compat.lastindex(s::LaTeXString) = Compat.lastindex(s.s)
-@static if isdefined(Base, :iterate)
-    Base.iterate(s::LaTeXString, i::Int) = iterate(s.s, i)
-    Base.iterate(s::LaTeXString) = iterate(s.s)
-else
-    Base.start(s::LaTeXString) = start(s.s)
-    Base.next(s::LaTeXString, i) = next(s.s, i)
-    Base.done(s::LaTeXString, i) = done(s.s, i)
-end
+Base.firstindex(s::LaTeXString) = firstindex(s.s)
+Base.lastindex(s::LaTeXString) = lastindex(s.s)
+Base.iterate(s::LaTeXString, i::Int) = iterate(s.s, i)
+Base.iterate(s::LaTeXString) = iterate(s.s)
 Base.nextind(s::LaTeXString, i::Int) = nextind(s.s, i)
 Base.prevind(s::LaTeXString, i::Int) = prevind(s.s, i)
 Base.eachindex(s::LaTeXString) = eachindex(s.s)
@@ -76,10 +67,10 @@ Base.getindex(s::LaTeXString, i::Int) = getindex(s.s, i) # for method ambig in J
 Base.getindex(s::LaTeXString, i::UnitRange{Int}) = getindex(s.s, i)
 Base.getindex(s::LaTeXString, i::UnitRange{<:Integer}) = getindex(s.s, i)
 Base.getindex(s::LaTeXString, i::AbstractVector{<:Integer}) = getindex(s.s, i)
-Compat.codeunit(s::LaTeXString, i::Integer) = codeunit(s.s, i)
-Compat.codeunit(s::LaTeXString) = codeunit(s.s)
-Compat.ncodeunits(s::LaTeXString) = ncodeunits(s.s)
-Compat.codeunits(s::LaTeXString) = codeunits(s.s)
+Base.codeunit(s::LaTeXString, i::Integer) = codeunit(s.s, i)
+Base.codeunit(s::LaTeXString) = codeunit(s.s)
+Base.ncodeunits(s::LaTeXString) = ncodeunits(s.s)
+Base.codeunits(s::LaTeXString) = codeunits(s.s)
 Base.sizeof(s::LaTeXString) = sizeof(s.s)
 Base.isvalid(s::LaTeXString, i::Integer) = isvalid(s.s, i)
 Base.pointer(s::LaTeXString) = pointer(s.s)

@@ -48,8 +48,8 @@ you might want to use `latexstring` instead of `L"..."` is that only
 the former supports [string
 interpolation](http://docs.julialang.org/en/latest/manual/strings/#interpolation)
 (inserting the values of other variables into your string).
-Note that you can supply a mixture of string, LaTeXString, and numeric arguments,
-*e.g.* `latexstring("an equation: ", L"1 + \alpha^2 = ", round(pi, digits=3))`
+Note that you can supply multiple arguments (of any types) to `latexstring`, which are converted to
+strings and concatenated as in the `string(...)` function.
 
 
 Finally, you can use the lowest-level constructor

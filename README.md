@@ -38,7 +38,7 @@ strings); for example `L"1 + \alpha^2"` or `L"an equation: $1 +
 string, i.e. the string is interpreted as an equation, if you do not
 include `$` yourself.)
 
-If you wabnt to perform [string
+If you want to perform [string
 interpolation](http://docs.julialang.org/en/latest/manual/strings/#interpolation)
 (inserting the values of other variables into your string), use `%$` instead of
 the plain `$` that you would use for interpolation in ordinary Julia strings.

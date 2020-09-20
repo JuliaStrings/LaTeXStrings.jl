@@ -27,3 +27,31 @@ end
 # show should return nothing
 @test show(IOBuffer(), "application/x-latex", tst1) === nothing
 @test show(IOBuffer(), "text/latex", tst1) === nothing
+
+@testset "interpolation" begin
+    @test L"" == latexstring("")
+    @test L"%" == latexstring("%")
+    @test L"$" == latexstring("\$")
+    @test L"%$" == latexstring("")
+
+    for x in ["foo", 'c', 7, 3.1]
+        @test L"%$x" == latexstring(x)
+        @test L"%%$(x)foo" == latexstring("%", x, "foo")
+        @test L"%$(x)%$x" == latexstring(x, x)
+    end
+    @test L"%$(1+2)" == latexstring(3)
+    @test L"%$(raw\"$$\")" == latexstring(raw"$$")
+
+    if VERSION >= v"1.6.0-DEV.22"
+        @test L"%$(@__FILE__)" == latexstring(@__FILE__)
+    end
+
+    @test_throws ErrorException getproperty(LaTeXStrings, Symbol("@L_str"))(
+        LineNumberNode(@__LINE__, @__FILE__), @__MODULE__,
+        "%\$(",
+    )
+end
+
+using Documenter
+DocMeta.setdocmeta!(LaTeXStrings, :DocTestSetup, :(using LaTeXStrings); recursive=true)
+doctest(LaTeXStrings; manual = false)

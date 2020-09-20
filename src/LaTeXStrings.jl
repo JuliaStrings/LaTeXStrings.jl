@@ -29,6 +29,11 @@ struct LaTeXString <: AbstractString
     s::String
 end
 
+# the only point of using LaTeXString to represent equations, since
+# IJulia doesn't support LaTeX output other than equations, so add $'s
+# around the string if they aren't there (ignoring \$ and %$)
+_maybe_wrap_equation(s) = occursin(r"[^\\%]\$|^\$", s) ? s : string('\$', s, '\$')
+
 """
     latexstring(args...)
 
@@ -36,15 +41,55 @@ Similar to `string(args...)`, but generates a `LaTeXString` instead of a `String
 """
 latexstring(args...) = latexstring(string(args...))
 function latexstring(s::String)
-    # the only point of using LaTeXString to represent equations, since
-    # IJulia doesn't support LaTeX output other than equations, so add $'s
-    # around the string if they aren't there (ignoring \$)
-    return occursin(r"[^\\]\$|^\$", s) ? LaTeXString(s) :  LaTeXString(string('\$', s, '\$'))
+    return LaTeXString(_maybe_wrap_equation(s))
 end
 latexstring(s::AbstractString) = latexstring(String(s))
 
-macro L_str(s, flags...) latexstring(s) end
-macro L_mstr(s, flags...) latexstring(s) end
+if isdefined(Meta, :parseatom)
+    const parseatom = Meta.parseatom
+else
+    parseatom(s, i; filename=nothing) = Meta.parse(s, i; greedy=false)
+end
+
+@doc raw"""
+    L"..."
+
+Creates a `LaTeXString` and is equivalent to `latexstring(raw"...")`, except that
+`%$` can be used for interpolation.
+
+```jldoctest
+julia> L"x = \sqrt{2}"
+L"$x = \sqrt{2}$"
+
+julia> L"x = %$(sqrt(2))"
+L"$x = 1.4142135623730951$"
+```
+"""
+macro L_str(s::String)
+    i = firstindex(s)
+    buf = IOBuffer(maxsize=ncodeunits(s))
+    ex = Expr(:call, GlobalRef(LaTeXStrings, :latexstring))
+    while i <= ncodeunits(s)
+        c = @inbounds s[i]
+        i = nextind(s, i)
+        if c === '%' && i <= ncodeunits(s)
+            c = @inbounds s[i]
+            if c === '$'
+                position(buf) > 0 && push!(ex.args, String(take!(buf)))
+                atom, i = parseatom(s, nextind(s, i), filename=string(__source__.file))
+                Meta.isexpr(atom, :incomplete) && error(atom.args[1])
+                atom !== nothing && push!(ex.args, atom)
+                continue
+            else
+                print(buf, '%')
+            end
+        else
+            print(buf, c)
+        end
+    end
+    position(buf) > 0 && push!(ex.args, String(take!(buf)))
+    return esc(ex)
+end
 
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)
 Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)

@@ -48,36 +48,52 @@ latexstring(s::AbstractString) = latexstring(String(s))
 if isdefined(Meta, :parseatom)
     const parseatom = Meta.parseatom
 else
-    parseatom(s, i; filename=nothing) = Meta.parse(s, i, greedy=false)
+    parseatom(s, i; filename=nothing) = Meta.parse(s, i; greedy=false)
 end
 
-macro L_str(s, flags...)
-    s = _maybe_wrap_equation(s)
+@doc raw"""
+    L"..."
+
+Creates a `LaTeXString` and is equivalent to `latexstring(raw"...")`, except that
+`%$` can be used for interpolation.
+
+```jldoctest
+julia> L"x = \sqrt{2}"
+L"$x = \sqrt{2}$"
+
+julia> L"x = %$(sqrt(2))"
+L"$x = 1.4142135623730951$"
+```
+"""
+macro L_str(s::String)
     i = firstindex(s)
     buf = IOBuffer(maxsize=ncodeunits(s))
     ex = Expr(:string)
     while i <= ncodeunits(s)
         c = @inbounds s[i]
-        if c === '%'
-            i = nextind(s, i)
-            i > ncodeunits(s) && break
+        i = nextind(s, i)
+        if c === '%' && i <= ncodeunits(s)
             c = @inbounds s[i]
             if c === '$'
                 position(buf) > 0 && push!(ex.args, String(take!(buf)))
                 atom, i = parseatom(s, nextind(s, i), filename=__source__.file)
+                Meta.isexpr(atom, :incomplete) && error(atom.args[1])
                 atom !== nothing && push!(ex.args, atom)
                 continue
             else
                 print(buf, '%')
             end
+        else
+            print(buf, c)
         end
-        print(buf, c)
-        i = nextind(s, i)
     end
     position(buf) > 0 && push!(ex.args, String(take!(buf)))
+    if !any(s -> s isa String && occursin(r"[^\\%]\$|^\$", s), ex.args)
+        pushfirst!(ex.args, '$')
+        push!(ex.args, '$')
+    end
     return :(LaTeXString($(esc(ex))))
 end
-macro L_mstr(s, flags...) latexstring(s) end
 
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)
 Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)

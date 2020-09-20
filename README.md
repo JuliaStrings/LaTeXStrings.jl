@@ -38,19 +38,20 @@ strings); for example `L"1 + \alpha^2"` or `L"an equation: $1 +
 string, i.e. the string is interpreted as an equation, if you do not
 include `$` yourself.)
 
+If you wabnt to perform [string
+interpolation](http://docs.julialang.org/en/latest/manual/strings/#interpolation)
+(inserting the values of other variables into your string), use `%$` instead of
+the plain `$` that you would use for interpolation in ordinary Julia strings.
+For example, if `x=3` is a Julia variable, then `L"y = %$x" will produce `L"y = 3"`.
+
 You can also use the lower-level constructor `latexstring(args...)`,
 which works much like `string(args...)` except that it produces a
 `LaTeXString` result and automatically puts `$` at the beginning and
 end of the string if an unescaped `$` is not already present.  Note
 that with `latexstring(...)` you *do* have to escape `$` and `\`: for
-example, `latexstring("an equation: \$1 + \\alpha^2\$")`.  One reason
-you might want to use `latexstring` instead of `L"..."` is that only
-the former supports [string
-interpolation](http://docs.julialang.org/en/latest/manual/strings/#interpolation)
-(inserting the values of other variables into your string).
+example, `latexstring("an equation: \$1 + \\alpha^2\$")`.  
 Note that you can supply multiple arguments (of any types) to `latexstring`, which are converted to
 strings and concatenated as in the `string(...)` function.
-
 
 Finally, you can use the lowest-level constructor
 `LaTeXString(s)`.  The only advantage of this is that it

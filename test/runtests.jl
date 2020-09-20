@@ -40,6 +40,7 @@ end
         @test L"%$(x)%$x" == latexstring(x, x)
     end
     @test L"%$(1+2)" == latexstring(3)
+    @test L"%$(raw\"$$\")" == latexstring(raw"$$")
 
     if VERSION >= v"1.6.0-DEV.22"
         @test L"%$(@__FILE__)" == latexstring(@__FILE__)

@@ -68,7 +68,7 @@ L"$x = 1.4142135623730951$"
 macro L_str(s::String)
     i = firstindex(s)
     buf = IOBuffer(maxsize=ncodeunits(s))
-    ex = Expr(:string)
+    ex = Expr(:call, GlobalRef(LaTeXStrings, :latexstring))
     while i <= ncodeunits(s)
         c = @inbounds s[i]
         i = nextind(s, i)
@@ -88,11 +88,7 @@ macro L_str(s::String)
         end
     end
     position(buf) > 0 && push!(ex.args, String(take!(buf)))
-    if !any(s -> s isa String && occursin(r"[^\\%]\$|^\$", s), ex.args)
-        pushfirst!(ex.args, '$')
-        push!(ex.args, '$')
-    end
-    return :(LaTeXString($(esc(ex))))
+    return esc(ex)
 end
 
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)

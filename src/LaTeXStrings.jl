@@ -76,7 +76,7 @@ macro L_str(s::String)
             c = @inbounds s[i]
             if c === '$'
                 position(buf) > 0 && push!(ex.args, String(take!(buf)))
-                atom, i = parseatom(s, nextind(s, i), filename=__source__.file)
+                atom, i = parseatom(s, nextind(s, i), filename=string(__source__.file))
                 Meta.isexpr(atom, :incomplete) && error(atom.args[1])
                 atom !== nothing && push!(ex.args, atom)
                 continue

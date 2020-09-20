@@ -45,7 +45,7 @@ end
         @test L"%$(@__FILE__)" == latexstring(@__FILE__)
     end
 
-    @test_throws ErrorException var"@L_str"(
+    @test_throws ErrorException getproperty(LaTeXStrings, Symbol("@L_str"))(
         LineNumberNode(@__LINE__, @__FILE__), @__MODULE__,
         "%\$(",
     )

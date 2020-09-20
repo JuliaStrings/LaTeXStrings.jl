@@ -42,7 +42,7 @@ If you want to perform [string
 interpolation](https://docs.julialang.org/en/v1/manual/strings/#string-interpolation)
 (inserting the values of other variables into your string), use `%$` instead of
 the plain `$` that you would use for interpolation in ordinary Julia strings.
-For example, if `x=3` is a Julia variable, then `L"y = %$x" will produce `L"y = 3"`.
+For example, if `x=3` is a Julia variable, then `L"y = %$x"` will produce `L"y = 3"`.
 
 You can also use the lower-level constructor `latexstring(args...)`,
 which works much like `string(args...)` except that it produces a

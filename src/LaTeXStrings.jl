@@ -29,6 +29,11 @@ struct LaTeXString <: AbstractString
     s::String
 end
 
+# the only point of using LaTeXString to represent equations, since
+# IJulia doesn't support LaTeX output other than equations, so add $'s
+# around the string if they aren't there (ignoring \$ and %$)
+_maybe_wrap_equation(s) = occursin(r"[^\\%]\$|^\$", s) ? s : string('\$', s, '\$')
+
 """
     latexstring(args...)
 
@@ -36,14 +41,42 @@ Similar to `string(args...)`, but generates a `LaTeXString` instead of a `String
 """
 latexstring(args...) = latexstring(string(args...))
 function latexstring(s::String)
-    # the only point of using LaTeXString to represent equations, since
-    # IJulia doesn't support LaTeX output other than equations, so add $'s
-    # around the string if they aren't there (ignoring \$)
-    return occursin(r"[^\\]\$|^\$", s) ? LaTeXString(s) :  LaTeXString(string('\$', s, '\$'))
+    return LaTeXString(_maybe_wrap_equation(s))
 end
 latexstring(s::AbstractString) = latexstring(String(s))
 
-macro L_str(s, flags...) latexstring(s) end
+if isdefined(Meta, :parseatom)
+    const parseatom = Meta.parseatom
+else
+    parseatom(s, i; filename=nothing) = Meta.parse(s, i, greedy=false)
+end
+
+macro L_str(s, flags...)
+    s = _maybe_wrap_equation(s)
+    i = firstindex(s)
+    buf = IOBuffer(maxsize=ncodeunits(s))
+    ex = Expr(:string)
+    while i <= ncodeunits(s)
+        c = @inbounds s[i]
+        if c === '%'
+            i = nextind(s, i)
+            i > ncodeunits(s) && break
+            c = @inbounds s[i]
+            if c === '$'
+                position(buf) > 0 && push!(ex.args, String(take!(buf)))
+                atom, i = parseatom(s, nextind(s, i), filename=__source__.file)
+                atom !== nothing && push!(ex.args, atom)
+                continue
+            else
+                print(buf, '%')
+            end
+        end
+        print(buf, c)
+        i = nextind(s, i)
+    end
+    position(buf) > 0 && push!(ex.args, String(take!(buf)))
+    return :(LaTeXString($(esc(ex))))
+end
 macro L_mstr(s, flags...) latexstring(s) end
 
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)

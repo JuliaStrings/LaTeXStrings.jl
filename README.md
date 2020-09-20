@@ -39,7 +39,7 @@ string, i.e. the string is interpreted as an equation, if you do not
 include `$` yourself.)
 
 If you want to perform [string
-interpolation](http://docs.julialang.org/en/latest/manual/strings/#interpolation)
+interpolation](https://docs.julialang.org/en/v1/manual/strings/#string-interpolation)
 (inserting the values of other variables into your string), use `%$` instead of
 the plain `$` that you would use for interpolation in ordinary Julia strings.
 For example, if `x=3` is a Julia variable, then `L"y = %$x" will produce `L"y = 3"`.

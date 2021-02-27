@@ -96,7 +96,13 @@ Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)
 Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = print(io, s.s)
 function Base.show(io::IO, s::LaTeXString)
     print(io, "L")
-    Base.print_quoted_literal(io, s.s)
+    print_quoted_literal(io, s.s)
+end
+
+function print_quoted_literal(io, s::AbstractString)
+    print(io, '"')
+    for c = s; c == '"' ? print(io, "\\\"") : print(io, c); end
+    print(io, '"')
 end
 
 Base.firstindex(s::LaTeXString) = firstindex(s.s)

@@ -8,6 +8,7 @@ See in particular the `LaTeXString` type and the `L"..."` constructor macro.
 module LaTeXStrings
 export LaTeXString, latexstring, @L_str
 
+
 # IJulia supports LaTeX output for any object with a text/latex
 # writemime method, but these are annoying to type as string literals
 # in Julia because of all the escaping required, e.g. "\$\\alpha +
@@ -91,18 +92,22 @@ macro L_str(s::String)
     return esc(ex)
 end
 
+if isdefined(Base, :print_quoted_literal)
+    import Base.print_quoted_literal
+else
+    function print_quoted_literal(io,s)
+        print(io, '"')
+        Base.escape_raw_string(io,s)
+        print(io, '"')
+    end
+end
+
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)
 Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)
 Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = print(io, s.s)
 function Base.show(io::IO, s::LaTeXString)
     print(io, "L")
     print_quoted_literal(io, s.s)
-end
-
-function print_quoted_literal(io, s::AbstractString)
-    print(io, '"')
-    for c = s; c == '"' ? print(io, "\\\"") : print(io, c); end
-    print(io, '"')
 end
 
 Base.firstindex(s::LaTeXString) = firstindex(s.s)

@@ -8,7 +8,6 @@ See in particular the `LaTeXString` type and the `L"..."` constructor macro.
 module LaTeXStrings
 export LaTeXString, latexstring, @L_str
 
-
 # IJulia supports LaTeX output for any object with a text/latex
 # writemime method, but these are annoying to type as string literals
 # in Julia because of all the escaping required, e.g. "\$\\alpha +

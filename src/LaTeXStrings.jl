@@ -101,7 +101,7 @@ function Base.show(io::IO, s::LaTeXString)
         print(io,'"')
     else
         print(io, 'L')
-        print_quoted_literal(io, s.s)   # Julia < 1.6
+        Base.print_quoted_literal(io, s.s)   # Julia < 1.6
     end
 end
 

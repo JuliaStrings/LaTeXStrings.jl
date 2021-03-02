@@ -6,6 +6,7 @@ tst1s = String(tst1)
 @test L"\alpha^2" == "\$\\alpha^2\$"
 @test repr("text/latex", tst1) == repr("application/x-latex", tst1) == tst1s
 @test sprint(show, "text/latex", tst1) == tst1s
+@test sprint(show, "text/plain", tst1) == "L\"an equation: \$\\alpha^2\$\""
 @test latexstring(tst1s) == tst1 == LaTeXString(tst1s)
 
 @test ccall(:strlen, Csize_t, (Cstring,), tst1) == ccall(:strlen, Csize_t, (Ptr{UInt8},), tst1) == sizeof(tst1)

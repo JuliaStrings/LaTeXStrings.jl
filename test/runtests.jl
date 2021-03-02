@@ -7,6 +7,7 @@ tst1s = String(tst1)
 @test repr("text/latex", tst1) == repr("application/x-latex", tst1) == tst1s
 @test sprint(show, "text/latex", tst1) == tst1s
 @test latexstring(tst1s) == tst1 == LaTeXString(tst1s)
+@test sprint(show, MIME("text/plain"), L"x") == "L\"\$x\$\""
 
 @test ccall(:strlen, Csize_t, (Cstring,), tst1) == ccall(:strlen, Csize_t, (Ptr{UInt8},), tst1) == sizeof(tst1)
 
@@ -51,6 +52,7 @@ end
         "%\$(",
     )
 end
+
 
 using Documenter
 DocMeta.setdocmeta!(LaTeXStrings, :DocTestSetup, :(using LaTeXStrings); recursive=true)

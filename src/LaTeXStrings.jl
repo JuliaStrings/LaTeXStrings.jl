@@ -94,9 +94,17 @@ end
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)
 Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)
 Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = print(io, s.s)
-function Base.show(io::IO, s::LaTeXString)
-    print(io, "L")
-    Base.print_quoted_literal(io, s.s)
+if VERSION >= v"1.6-"
+    function Base.show(io::IO, s::LaTeXString)
+        print(io, "L\"")
+        Base.escape_raw_string(io, s.s)
+        print(io, "\"")
+    end
+else
+    function Base.show(io::IO, s::LaTeXString)
+        print(io, "L")
+        Base.print_quoted_literal(io, s.s)
+    end
 end
 
 Base.firstindex(s::LaTeXString) = firstindex(s.s)

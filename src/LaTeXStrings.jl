@@ -95,8 +95,14 @@ Base.write(io::IO, s::LaTeXString) = write(io, s.s)
 Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)
 Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = print(io, s.s)
 function Base.show(io::IO, s::LaTeXString)
-    print(io, "L")
-    Base.print_quoted_literal(io, s.s)
+    @static if isdefined(Base, :escape_raw_string)  # Julia ≥ 1.4
+        print(io,"L\"")
+        Base.escape_raw_string(io, s.s)
+        print(io,'"')
+    else
+        print(io, 'L')
+        Base.print_quoted_literal(io, s.s)   # Julia < 1.6
+    end
 end
 
 Base.firstindex(s::LaTeXString) = firstindex(s.s)

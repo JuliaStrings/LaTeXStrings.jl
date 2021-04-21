@@ -127,5 +127,6 @@ Base.isvalid(s::LaTeXString, i::Integer) = isvalid(s.s, i)
 Base.pointer(s::LaTeXString) = pointer(s.s)
 Base.IOBuffer(s::LaTeXString) = IOBuffer(s.s)
 Base.unsafe_convert(T::Union{Type{Ptr{UInt8}},Type{Ptr{Int8}},Cstring}, s::LaTeXString) = Base.unsafe_convert(T, s.s)
+Base.match(r::Regex, s::LaTeXString) = match(r, s.s)
 
 end # module

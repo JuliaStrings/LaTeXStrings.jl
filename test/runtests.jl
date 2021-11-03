@@ -22,6 +22,10 @@ end
 @test L"foo"[1] == '$'
 @test tst1[1:2] == tst1[0x01:0x02] == tst1[[1,2]] == "an"
 
+@test match(r"[a-z]+", tst1, 3).match == match(r"[a-z]+", tst1.s, 3).match
+@test findnext(r"[a-z]+", tst1, 3) == findnext(r"[a-z]+", tst1.s, 3)
+@test [m.match for m in eachmatch(r"[a-z]+", tst1)] == [m.match for m in eachmatch(r"[a-z]+", tst1.s)]
+
 # issue #23 — will change if #17 is addressed
 @test L"x" * L"y" == "\$x\$\$y\$"
 

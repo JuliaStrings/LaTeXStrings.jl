@@ -127,5 +127,8 @@ Base.isvalid(s::LaTeXString, i::Integer) = isvalid(s.s, i)
 Base.pointer(s::LaTeXString) = pointer(s.s)
 Base.IOBuffer(s::LaTeXString) = IOBuffer(s.s)
 Base.unsafe_convert(T::Union{Type{Ptr{UInt8}},Type{Ptr{Int8}},Cstring}, s::LaTeXString) = Base.unsafe_convert(T, s.s)
+Base.match(re::Regex, s::LaTeXString, idx::Integer, add_opts::UInt32=UInt32(0)) = match(re, s.s, idx, add_opts)
+Base.findnext(re::Regex, s::LaTeXString, idx::Integer) = findnext(re, s.s, idx)
+Base.eachmatch(re::Regex, s::LaTeXString; overlap = false) = eachmatch(re, s.s; overlap=overlap)
 
 end # module

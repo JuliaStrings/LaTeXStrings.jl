@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/stevengj/LaTeXStrings.jl.svg?branch=master)](https://travis-ci.org/stevengj/LaTeXStrings.jl)
+[![Build Status](https://github.com/stevengj/LaTeXStrings.jl/workflows/CI/badge.svg)](https://github.com/stevengj/LaTeXStrings.jl/actions)
 
 # LaTeXStrings
 
@@ -49,7 +49,7 @@ which works much like `string(args...)` except that it produces a
 `LaTeXString` result and automatically puts `$` at the beginning and
 end of the string if an unescaped `$` is not already present.  Note
 that with `latexstring(...)` you *do* have to escape `$` and `\`: for
-example, `latexstring("an equation: \$1 + \\alpha^2\$")`.  
+example, `latexstring("an equation: \$1 + \\alpha^2\$")`.
 Note that you can supply multiple arguments (of any types) to `latexstring`, which are converted to
 strings and concatenated as in the `string(...)` function.
 

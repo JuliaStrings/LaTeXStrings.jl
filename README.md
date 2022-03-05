@@ -22,6 +22,12 @@ exploit this.  Therefore, the LaTeXStrings package defines:
 * `L"..."` and `L"""..."""` string macros which allow you to enter
   LaTeX equations without escaping backslashes and dollar signs
   (and which add the dollar signs for you if you omit them).
+  
+## FAQ: Not a LaTeX renderer
+
+LaTeXStrings does **not do any rendering** — it's sole purpose is to make it easier to *enter* LaTeX-rendered strings without typing a lot of [backslash escapes](https://xkcd.com/1638), as well as providing a type to tell rendering backends to use LaTeX formatting if possible.
+
+Other packages like plotting software, [Jupyter notebooks](https://github.com/JuliaLang/IJulia.jl), [Pluto](https://github.com/fonsp/Pluto.jl), etcetera, are responsible for the LaTeX rendering (if any).  For example, they might use [MathJax](https://www.mathjax.org/), [MathTeXEngine.jl](https://github.com/Kolaru/MathTeXEngine.jl), or [other renderers](https://matplotlib.org/2.0.2/users/mathtext.html).   LaTeXStrings only provides the LaTeX text to these backend, and has no influence on what LaTeX features (if any) are supported.
 
 ## Usage
 

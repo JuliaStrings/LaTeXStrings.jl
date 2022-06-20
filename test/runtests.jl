@@ -57,6 +57,21 @@ end
     )
 end
 
+@testset "indexing" begin
+    tst1 = L"an equation: $\alpha^2$"
+    tst1s = String(tst1)
+
+    @test tst1[5] == tst1s[5]
+    @test tst1[15] == tst1s[15]
+
+    idx = [5, 10, 15]
+    @test tst1[idx] == tst1s[idx]
+
+    # issue #61
+    idx = rand(Bool, length(tst1))
+    @test_throws ArgumentError tst1[idx]
+end
+
 using Documenter
 DocMeta.setdocmeta!(LaTeXStrings, :DocTestSetup, :(using LaTeXStrings); recursive=true)
 doctest(LaTeXStrings; manual = false)

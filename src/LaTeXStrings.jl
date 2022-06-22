@@ -118,6 +118,7 @@ Base.getindex(s::LaTeXString, i::Int) = getindex(s.s, i) # for method ambig in J
 Base.getindex(s::LaTeXString, i::UnitRange{Int}) = getindex(s.s, i)
 Base.getindex(s::LaTeXString, i::UnitRange{<:Integer}) = getindex(s.s, i)
 Base.getindex(s::LaTeXString, i::AbstractVector{<:Integer}) = getindex(s.s, i)
+Base.getindex(s::LaTeXString, i::AbstractVector{Bool}) = getindex(s.s, i) # for method ambiguity
 Base.codeunit(s::LaTeXString, i::Integer) = codeunit(s.s, i)
 Base.codeunit(s::LaTeXString) = codeunit(s.s)
 Base.ncodeunits(s::LaTeXString) = ncodeunits(s.s)

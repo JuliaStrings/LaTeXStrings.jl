@@ -1,4 +1,7 @@
 using LaTeXStrings, Test
+import Aqua
+
+Aqua.test_all(LaTeXStrings)
 
 tst1 = L"an equation: $\alpha^2$"
 tst1s = String(tst1)

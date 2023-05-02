@@ -1,4 +1,8 @@
 using LaTeXStrings, Test
+import Aqua
+using Base: OneTo
+
+Aqua.test_all(LaTeXStrings)
 
 tst1 = L"an equation: $\alpha^2$"
 tst1s = String(tst1)
@@ -61,15 +65,23 @@ end
     tst1 = L"an equation: $\alpha^2$"
     tst1s = String(tst1)
 
+    @test firstindex(tst1) == 1
+    @test lastindex(tst1) == length(tst1)
+
     @test tst1[5] == tst1s[5]
     @test tst1[15] == tst1s[15]
 
     idx = [5, 10, 15]
     @test tst1[idx] == tst1s[idx]
 
-    # issue #61
-    idx = rand(Bool, length(tst1))
-    @test_throws ArgumentError tst1[idx]
+    # to test for ambiguities (#61, #65)
+    bool_idx = rand(Bool, length(tst1))
+    @test_throws ArgumentError tst1[bool_idx]
+
+    @test tst1[UInt(5)] == tst1[5]
+    @test tst1[UInt.(idx)] == tst1[idx]
+
+    @test tst1[OneTo(5)] == tst1[1:5]
 end
 
 using Documenter

@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/stevengj/LaTeXStrings.jl/workflows/CI/badge.svg)](https://github.com/stevengj/LaTeXStrings.jl/actions)
+[![Build Status](https://github.com/JuliaStrings/LaTeXStrings.jl/workflows/CI/badge.svg)](https://github.com/JuliaStrings/LaTeXStrings.jl/actions)
 
 # LaTeXStrings
 

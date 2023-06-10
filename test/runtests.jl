@@ -84,6 +84,10 @@ end
     @test tst1[OneTo(5)] == tst1[1:5]
 end
 
+@testset "escaping" begin
+    @test latexescape(raw"A\&%$#_{}~^<>z") == raw"A\textbackslash{}\&\%\$\#\_\{\}\textasciitilde{}\^{}\textless{}\textgreater{}z"
+end
+
 using Documenter
 DocMeta.setdocmeta!(LaTeXStrings, :DocTestSetup, :(using LaTeXStrings); recursive=true)
 doctest(LaTeXStrings; manual = false)

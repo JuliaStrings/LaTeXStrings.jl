@@ -6,7 +6,7 @@ in supporting environments like IJulia.
 See in particular the `LaTeXString` type and the `L"..."` constructor macro.
 """
 module LaTeXStrings
-export LaTeXString, latexstring, @L_str
+export LaTeXString, latexstring, @L_str, latexescape
 
 # IJulia supports LaTeX output for any object with a text/latex
 # writemime method, but these are annoying to type as string literals
@@ -132,5 +132,34 @@ Base.unsafe_convert(T::Union{Type{Ptr{UInt8}},Type{Ptr{Int8}},Cstring}, s::LaTeX
 Base.match(re::Regex, s::LaTeXString, idx::Integer, add_opts::UInt32=UInt32(0)) = match(re, s.s, idx, add_opts)
 Base.findnext(re::Regex, s::LaTeXString, idx::Integer) = findnext(re, s.s, idx)
 Base.eachmatch(re::Regex, s::LaTeXString; overlap = false) = eachmatch(re, s.s; overlap=overlap)
+
+const LATEX_ESCAPE_SUB_TABLE = Pair{String,String}[
+    raw"\\" => raw"\textbackslash{}",
+    raw"&" => raw"\&",
+    raw"%" => raw"\%",
+    raw"$" => raw"\$",
+    raw"#" => raw"\#",
+    raw"_" => raw"\_",
+    raw"{" => raw"\{",
+    raw"}" => raw"\}",
+    raw"~" => raw"\textasciitilde{}",
+    raw"^" => raw"\^{}",
+    raw"<" => raw"\textless{}",
+    raw">" => raw"\textgreater{}",
+]
+
+@doc raw"""
+    latexscape(s::AbstractString)
+
+This function escapes common text so it can be included directly into ``\TeX`` code[^so16259923].
+
+## References
+
+[^so16259923]:
+    Stack Overflow: ["How can I escape LaTeX special characters inside django templates?"](https://stackoverflow.com/questions/16259923)
+"""
+function latexescape(s::AbstractString)
+    return replace(s, LATEX_ESCAPE_SUB_TABLE...)
+end
 
 end # module

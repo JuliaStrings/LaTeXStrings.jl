@@ -105,16 +105,11 @@ function Base.show(io::IO, s::LaTeXString)
     end
 end
 
-Base.firstindex(s::LaTeXString) = firstindex(s.s)
-Base.lastindex(s::LaTeXString) = lastindex(s.s)
 Base.iterate(s::LaTeXString, i::Int) = iterate(s.s, i)
 Base.iterate(s::LaTeXString) = iterate(s.s)
-Base.nextind(s::LaTeXString, i::Int) = nextind(s.s, i)
 Base.prevind(s::LaTeXString, i::Int) = prevind(s.s, i)
 Base.eachindex(s::LaTeXString) = eachindex(s.s)
 Base.length(s::LaTeXString) = length(s.s)
-Base.getindex(s::LaTeXString, i::Integer) = getindex(s.s, i)
-Base.getindex(s::LaTeXString, i::Int) = getindex(s.s, i) # for method ambig in Julia 0.6
 Base.getindex(s::LaTeXString, i::UnitRange{Int}) = getindex(s.s, i)
 Base.getindex(s::LaTeXString, i::UnitRange{<:Integer}) = getindex(s.s, i)
 Base.getindex(s::LaTeXString, i::AbstractUnitRange{<:Integer}) = getindex(s.s, i) # for method ambiguity
@@ -124,13 +119,11 @@ Base.codeunit(s::LaTeXString, i::Integer) = codeunit(s.s, i)
 Base.codeunit(s::LaTeXString) = codeunit(s.s)
 Base.ncodeunits(s::LaTeXString) = ncodeunits(s.s)
 Base.codeunits(s::LaTeXString) = codeunits(s.s)
-Base.sizeof(s::LaTeXString) = sizeof(s.s)
 Base.isvalid(s::LaTeXString, i::Integer) = isvalid(s.s, i)
 Base.pointer(s::LaTeXString) = pointer(s.s)
 Base.IOBuffer(s::LaTeXString) = IOBuffer(s.s)
 Base.unsafe_convert(T::Union{Type{Ptr{UInt8}},Type{Ptr{Int8}},Cstring}, s::LaTeXString) = Base.unsafe_convert(T, s.s)
 Base.match(re::Regex, s::LaTeXString, idx::Integer, add_opts::UInt32=UInt32(0)) = match(re, s.s, idx, add_opts)
 Base.findnext(re::Regex, s::LaTeXString, idx::Integer) = findnext(re, s.s, idx)
-Base.eachmatch(re::Regex, s::LaTeXString; overlap = false) = eachmatch(re, s.s; overlap=overlap)
 
 end # module

@@ -105,6 +105,17 @@ function Base.show(io::IO, s::LaTeXString)
     end
 end
 
+Base.showable(::MIME"juliavscode/html", ::LaTeXString) = true
+function Base.repr(::MIME"juliavscode/html", s::LaTeXString)
+    mathjax_import_str = """
+      <script> MathJax = { tex: { displayMath: [['\$', '\$']] } }; </script>
+      <script src="/js/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      """
+    return mathjax_import_str * s.s
+end
+
 Base.firstindex(s::LaTeXString) = firstindex(s.s)
 Base.lastindex(s::LaTeXString) = lastindex(s.s)
 Base.iterate(s::LaTeXString, i::Int) = iterate(s.s, i)

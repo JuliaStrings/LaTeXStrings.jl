@@ -27,7 +27,7 @@ exploit this.  Therefore, the LaTeXStrings package defines:
 
 LaTeXStrings does **not do any rendering** — its sole purpose is to make it easier to *enter* LaTeX-rendered strings without typing a lot of [backslash escapes](https://xkcd.com/1638), as well as providing a type to tell [display backends](https://docs.julialang.org/en/v1/base/io-network/#Multimedia-I/O) to use LaTeX rendering if possible.
 
-Other packages like plotting software, [Jupyter notebooks](https://github.com/JuliaLang/IJulia.jl), [Pluto](https://github.com/fonsp/Pluto.jl), etcetera, are responsible for the LaTeX rendering (if any).  For example, they might use [MathJax](https://www.mathjax.org/), [MathTeXEngine.jl](https://github.com/Kolaru/MathTeXEngine.jl), or [other renderers](https://matplotlib.org/2.0.2/users/mathtext.html). If you want to render equations as unicode see [LibTeXPrintf.jl](https://github.com/JuliaStrings/LibTeXPrintf.jl). LaTeXStrings only provides the LaTeX text to these backend, and has no influence on what LaTeX features (if any) are supported.
+Other packages like plotting software, [Jupyter notebooks](https://github.com/JuliaLang/IJulia.jl), [Pluto](https://github.com/fonsp/Pluto.jl), etcetera, are responsible for the LaTeX rendering (if any).  For example, they might use [MathJax](https://www.mathjax.org/), [MathTeXEngine.jl](https://github.com/Kolaru/MathTeXEngine.jl), or [other renderers](https://matplotlib.org/2.0.2/users/mathtext.html). If you want to render equations as plain text via Unicode, see [LibTeXPrintf.jl](https://github.com/JuliaStrings/LibTeXPrintf.jl). LaTeXStrings only provides the LaTeX text to these backends, and has no influence on what LaTeX features (if any) are supported.
 
 ## Usage
 

@@ -111,7 +111,6 @@ end
 
 Base.iterate(s::LaTeXString, i::Int) = iterate(s.s, i)
 Base.iterate(s::LaTeXString) = iterate(s.s)
-Base.prevind(s::LaTeXString, i::Int) = prevind(s.s, i)
 Base.eachindex(s::LaTeXString) = eachindex(s.s)
 Base.length(s::LaTeXString) = length(s.s)
 Base.getindex(s::LaTeXString, i::UnitRange{Int}) = getindex(s.s, i)

@@ -92,6 +92,10 @@ macro L_str(s::String)
 end
 
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)
+@static if VERSION >= v"1.11"
+    Base.write(io::Base.AnnotatedIOBuffer, s::LaTeXString) = write(io, s.s)
+end
+
 Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)
 Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = print(io, s.s)
 function Base.show(io::IO, s::LaTeXString)

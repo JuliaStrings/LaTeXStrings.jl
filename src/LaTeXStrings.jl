@@ -92,6 +92,10 @@ macro L_str(s::String)
 end
 
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)
+@static if isdefined(Base, :AnnotatedIOBuffer) # Julia 1.11
+    Base.write(io::Base.AnnotatedIOBuffer, s::LaTeXString) = write(io, s.s)
+end
+
 Base.show(io::IO, ::MIME"application/x-latex", s::LaTeXString) = print(io, s.s)
 Base.show(io::IO, ::MIME"text/latex", s::LaTeXString) = print(io, s.s)
 function Base.show(io::IO, s::LaTeXString)
@@ -107,7 +111,6 @@ end
 
 Base.iterate(s::LaTeXString, i::Int) = iterate(s.s, i)
 Base.iterate(s::LaTeXString) = iterate(s.s)
-Base.prevind(s::LaTeXString, i::Int) = prevind(s.s, i)
 Base.eachindex(s::LaTeXString) = eachindex(s.s)
 Base.length(s::LaTeXString) = length(s.s)
 Base.getindex(s::LaTeXString, i::UnitRange{Int}) = getindex(s.s, i)

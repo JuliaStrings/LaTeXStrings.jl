@@ -92,7 +92,7 @@ macro L_str(s::String)
 end
 
 Base.write(io::IO, s::LaTeXString) = write(io, s.s)
-@static if VERSION >= v"1.11"
+@static if isdefined(Base, :AnnotatedIOBuffer) # Julia 1.11
     Base.write(io::Base.AnnotatedIOBuffer, s::LaTeXString) = write(io, s.s)
 end
 
